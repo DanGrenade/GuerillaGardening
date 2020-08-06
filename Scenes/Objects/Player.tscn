@@ -1,0 +1,166 @@
+[gd_scene load_steps=17 format=2]
+
+[ext_resource path="res://Scripts/Character_Movement.gd" type="Script" id=1]
+[ext_resource path="res://Scripts/Player/MovementInputController.gd" type="Script" id=2]
+[ext_resource path="res://Scripts/Player/CameraCast.gd" type="Script" id=3]
+[ext_resource path="res://Scripts/Player/CamPivot.gd" type="Script" id=4]
+[ext_resource path="res://Scripts/Player/Interaction_Handler.gd" type="Script" id=5]
+[ext_resource path="res://Scripts/Player/PlayerAnimator.gd" type="Script" id=6]
+[ext_resource path="res://Scripts/Player/Player_Overlord.gd" type="Script" id=7]
+
+[sub_resource type="BoxShape" id=1]
+extents = Vector3( 0.5, 1, 0.5 )
+
+[sub_resource type="Animation" id=2]
+resource_name = "Idle"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:width")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 1.0256 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:height")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 2.0 ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath(".:depth")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.979924 ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "Planting"
+length = 0.6
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:width")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ 1.0256, 0.8, 1.026 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:height")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.3, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ 2.0, 1.7, 2.0 ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath(".:depth")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.3, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ 0.979924, 0.9, 0.98 ]
+}
+
+[sub_resource type="AnimationNodeAnimation" id=4]
+animation = "Idle"
+
+[sub_resource type="AnimationNodeAnimation" id=5]
+animation = "Planting"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=6]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=7]
+
+[sub_resource type="AnimationNodeStateMachine" id=8]
+states/Idle/node = SubResource( 4 )
+states/Idle/position = Vector2( -89.6408, 99 )
+states/Planting/node = SubResource( 5 )
+states/Planting/position = Vector2( 127.359, 89 )
+transitions = [ "Idle", "Planting", SubResource( 6 ), "Planting", "Idle", SubResource( 7 ) ]
+graph_offset = Vector2( -348.641, 0 )
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id=9]
+
+[node name="KinematicBody" type="KinematicBody"]
+collision_layer = 2
+collision_mask = 5
+script = ExtResource( 1 )
+
+[node name="CollisionShape" type="CollisionShape" parent="."]
+shape = SubResource( 1 )
+
+[node name="Pivot" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.42027, -0.188859 )
+script = ExtResource( 4 )
+
+[node name="Camera" type="Camera" parent="Pivot"]
+transform = Transform( 1, 0, 0, 0, 0.972337, 0.233581, 0, -0.233581, 0.972337, -0.190146, 0.541935, 2.21891 )
+fov = 59.0625
+
+[node name="RayCast" type="RayCast" parent="Pivot/Camera"]
+enabled = true
+cast_to = Vector3( 0, 0, -30 )
+collide_with_areas = true
+script = ExtResource( 3 )
+interaction_handler_path = NodePath("../../../Interaction_Handler")
+
+[node name="CSGBox" type="CSGBox" parent="."]
+width = 1.0256
+depth = 0.979924
+
+[node name="PlayerAnimator" type="AnimationPlayer" parent="CSGBox"]
+anims/Idle = SubResource( 2 )
+anims/Planting = SubResource( 3 )
+script = ExtResource( 6 )
+
+[node name="AnimationTree" type="AnimationTree" parent="CSGBox/PlayerAnimator"]
+tree_root = SubResource( 8 )
+anim_player = NodePath("..")
+parameters/playback = SubResource( 9 )
+
+[node name="MovementInputController" type="Node" parent="."]
+script = ExtResource( 2 )
+input_path = NodePath("..")
+pivot_path = NodePath("../Pivot")
+
+[node name="Interaction_Handler" type="Node" parent="."]
+script = ExtResource( 5 )
+movement_node_path = NodePath("..")
+
+[node name="PlantingTime" type="Timer" parent="Interaction_Handler"]
+wait_time = 2.0
+
+[node name="Player_Overlord" type="Node" parent="."]
+script = ExtResource( 7 )
+[connection signal="change_anim_state" from="Interaction_Handler" to="CSGBox/PlayerAnimator" method="_on_Interaction_Handler_change_anim_state"]
+[connection signal="timeout" from="Interaction_Handler/PlantingTime" to="Interaction_Handler" method="_on_PlantingTime_timeout"]
