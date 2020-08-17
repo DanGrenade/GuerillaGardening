@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://Scripts/Character_Movement.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/Player/MovementInputController.gd" type="Script" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://Scripts/Player/Interaction_Handler.gd" type="Script" id=5]
 [ext_resource path="res://Scripts/Player/PlayerAnimator.gd" type="Script" id=6]
 [ext_resource path="res://Scripts/Player/Player_Overlord.gd" type="Script" id=7]
+[ext_resource path="res://Scripts/Inventory.gd" type="Script" id=8]
 
 [sub_resource type="BoxShape" id=1]
 extents = Vector3( 0.5, 1, 0.5 )
@@ -132,7 +133,7 @@ enabled = true
 cast_to = Vector3( 0, 0, -30 )
 collide_with_areas = true
 script = ExtResource( 3 )
-interaction_handler_path = NodePath("../../../Interaction_Handler")
+interaction_handler_path = NodePath("../../../Player_Overlord/Interaction_Handler")
 
 [node name="CSGBox" type="CSGBox" parent="."]
 width = 1.0256
@@ -148,19 +149,22 @@ tree_root = SubResource( 8 )
 anim_player = NodePath("..")
 parameters/playback = SubResource( 9 )
 
-[node name="MovementInputController" type="Node" parent="."]
-script = ExtResource( 2 )
-input_path = NodePath("..")
-pivot_path = NodePath("../Pivot")
-
-[node name="Interaction_Handler" type="Node" parent="."]
-script = ExtResource( 5 )
-movement_node_path = NodePath("..")
-
-[node name="PlantingTime" type="Timer" parent="Interaction_Handler"]
-wait_time = 2.0
-
 [node name="Player_Overlord" type="Node" parent="."]
 script = ExtResource( 7 )
-[connection signal="change_anim_state" from="Interaction_Handler" to="CSGBox/PlayerAnimator" method="_on_Interaction_Handler_change_anim_state"]
-[connection signal="timeout" from="Interaction_Handler/PlantingTime" to="Interaction_Handler" method="_on_PlantingTime_timeout"]
+
+[node name="Interaction_Handler" type="Node" parent="Player_Overlord"]
+script = ExtResource( 5 )
+movement_node_path = NodePath("../..")
+
+[node name="PlantingTime" type="Timer" parent="Player_Overlord/Interaction_Handler"]
+wait_time = 2.0
+
+[node name="MovementInputController" type="Node" parent="Player_Overlord"]
+script = ExtResource( 2 )
+input_path = NodePath("../..")
+pivot_path = NodePath("../../Pivot")
+
+[node name="Inventory" type="Node" parent="Player_Overlord"]
+script = ExtResource( 8 )
+[connection signal="change_anim_state" from="Player_Overlord/Interaction_Handler" to="CSGBox/PlayerAnimator" method="_on_Interaction_Handler_change_anim_state"]
+[connection signal="timeout" from="Player_Overlord/Interaction_Handler/PlantingTime" to="Player_Overlord/Interaction_Handler" method="_on_PlantingTime_timeout"]

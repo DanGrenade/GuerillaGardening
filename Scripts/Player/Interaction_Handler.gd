@@ -13,12 +13,16 @@ func _ready():
 	pass
 
 func interact(interaction_type):
-	if interaction_type == PlayerGlobals.interaction_grow:
-		$PlantingTime.start()
-		emit_signal("change_anim_state", "Planting")
-		current_state = playerstate_interacting
-		movement_node.pause_movement = true
-		pass
+	match interaction_type:
+		PlayerGlobals.interaction_grow:
+			$PlantingTime.start()
+			emit_signal("change_anim_state", "Planting")
+			current_state = playerstate_interacting
+			movement_node.pause_movement = true
+			pass
+		PlayerGlobals.interaction_seeds:
+			get_parent().add_to_inventory(PlayerGlobals.item_plant_seed, 999)
+			pass
 	pass
 
 
