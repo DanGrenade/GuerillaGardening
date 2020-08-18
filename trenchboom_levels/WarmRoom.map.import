@@ -1,0 +1,13 @@
+[remap]
+
+importer="qodot.map"
+type="Resource"
+path="res://.import/WarmRoom.map-c9761984c3231f3d04b1fadc5a6ecb42.tres"
+
+[deps]
+
+source_file="res://trenchboom_levels/WarmRoom.map"
+dest_files=[ "res://.import/WarmRoom.map-c9761984c3231f3d04b1fadc5a6ecb42.tres" ]
+
+[params]
+
