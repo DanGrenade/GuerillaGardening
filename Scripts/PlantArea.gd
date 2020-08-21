@@ -1,6 +1,5 @@
 extends Area
 
-
 enum {state_unplanted, state_seed, state_grown}
 var current_state = state_unplanted
 

@@ -1,6 +1,7 @@
 extends Node
 
-enum {interaction_fail, interaction_grow, interaction_seeds}
+enum {interaction_fail, interaction_grow, interaction_seeds, interaction_bounce}
+
 var player_node
 
 enum {item_empty, item_plant_seed}

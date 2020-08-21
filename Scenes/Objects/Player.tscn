@@ -122,7 +122,7 @@ script = ExtResource( 1 )
 [node name="Ground_Raycast" type="RayCast" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.907561, 0 )
 enabled = true
-cast_to = Vector3( 0, -0.3, 0 )
+cast_to = Vector3( 0, -0.2, 0 )
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
 shape = SubResource( 1 )
@@ -135,7 +135,7 @@ script = ExtResource( 4 )
 transform = Transform( 1, 0, 0, 0, 0.972337, 0.233581, 0, -0.233581, 0.972337, -0.190146, 0.541935, 2.21891 )
 fov = 59.0625
 
-[node name="RayCast" type="RayCast" parent="Camera_Pivot/Camera"]
+[node name="CameraCast" type="RayCast" parent="Camera_Pivot/Camera"]
 enabled = true
 cast_to = Vector3( 0, 0, -30 )
 collide_with_areas = true
@@ -162,7 +162,7 @@ pivot_path = NodePath("../Camera_Pivot")
 
 [node name="Interaction_Handler" type="Node" parent="Player_Overlord"]
 script = ExtResource( 5 )
-movement_node_path = NodePath("../..")
+camera_cast_path = NodePath("../../Camera_Pivot/Camera/CameraCast")
 
 [node name="PlantingTime" type="Timer" parent="Player_Overlord/Interaction_Handler"]
 wait_time = 2.0
@@ -179,5 +179,6 @@ ground_raycast_path = NodePath("../../Ground_Raycast")
 
 [node name="x_movement" type="Node" parent="Player_Overlord"]
 script = ExtResource( 10 )
+[connection signal="area_interaction" from="." to="Player_Overlord/Interaction_Handler" method="interact"]
 [connection signal="change_anim_state" from="Player_Overlord/Interaction_Handler" to="CSGBox/PlayerAnimator" method="_on_Interaction_Handler_change_anim_state"]
 [connection signal="timeout" from="Player_Overlord/Interaction_Handler/PlantingTime" to="Player_Overlord/Interaction_Handler" method="_on_PlantingTime_timeout"]

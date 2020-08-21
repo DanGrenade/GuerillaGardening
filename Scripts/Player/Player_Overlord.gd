@@ -14,6 +14,10 @@ func add_to_inventory(item, count):
 	pass
 
 func _process(delta):
+	if Input.is_action_just_pressed("hand_interact") && can_interact():
+		$Interaction_Handler.check_interact()
+		pass
+	
 	#Take in horizontal movement input
 	var movement_input = Vector2.ZERO
 	if Input.is_action_pressed("move_forward"): movement_input.y -= 1
@@ -30,4 +34,17 @@ func _process(delta):
 	if Input.is_action_pressed("jump"):
 		get_parent().give_vert_movement($y_movement.do_jump())
 	
+	pass
+
+func can_interact():
+	if $y_movement.in_air: return false
+	
+	return true
+
+func change_pause_state(new_state):
+	$x_movement.pause(new_state)
+	pass
+
+func bounce():
+	get_parent().give_vert_movement($y_movement.bounce())
 	pass

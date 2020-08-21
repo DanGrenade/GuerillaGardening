@@ -78,7 +78,7 @@ collision_mask = 0
 shape = SubResource( 1 )
 
 [node name="PlantArea" parent="." instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.32232 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4.59596, 0.414283, -12.3673 )
 
 [node name="Seeds" parent="." instance=ExtResource( 4 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.88566, 0.160293, 4.12703 )

@@ -7,6 +7,8 @@ export var gravity = 9.8
 export var jump_speed = 5
 export var max_fall_speed = -5
 
+export var bounce_speed = 30
+
 var in_air = false
 var current_y_velocity = 0
 
@@ -16,7 +18,7 @@ func _ready():
 
 func run_gravity(delta):
 	if in_air:
-		if ground_raycast_node.is_colliding():
+		if ground_raycast_node.is_colliding() && current_y_velocity < 2:
 			in_air = false
 			current_y_velocity = 0
 		else: current_y_velocity -= (gravity * delta)
@@ -32,4 +34,9 @@ func do_jump():
 		in_air = true
 		current_y_velocity = jump_speed
 		return current_y_velocity
+	return current_y_velocity
+
+func bounce():
+	in_air = true
+	current_y_velocity = bounce_speed
 	return current_y_velocity
