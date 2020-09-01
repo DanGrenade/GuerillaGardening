@@ -1,0 +1,13 @@
+[remap]
+
+importer="qodot.map"
+type="Resource"
+path="res://.import/Area1.map-45b126d19ea790c94ef06971e2bbc746.tres"
+
+[deps]
+
+source_file="res://trenchboom_levels/Area1.map"
+dest_files=[ "res://.import/Area1.map-45b126d19ea790c94ef06971e2bbc746.tres" ]
+
+[params]
+

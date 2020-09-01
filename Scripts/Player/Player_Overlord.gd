@@ -34,6 +34,8 @@ func _process(delta):
 	if Input.is_action_pressed("jump"):
 		get_parent().give_vert_movement($y_movement.do_jump())
 	
+	$Rotate_By_Velocity.Give_Velocity(get_parent().velocity)
+	
 	pass
 
 func can_interact():

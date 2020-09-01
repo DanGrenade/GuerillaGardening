@@ -4,9 +4,9 @@ var horizontal_velocity = Vector2.ZERO
 
 var pause_state = false
 
-export var acceleration = 4
-export var decceleration = 0.5
-export var max_speed = 5
+export var acceleration = 35
+export var decceleration = 20
+export var max_speed = 8
 
 func give_input(movement_input, delta):
 	

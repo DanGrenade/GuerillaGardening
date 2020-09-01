@@ -2,7 +2,8 @@ extends Spatial
 
 var yaw = 0
 var pitch = 0
-var sensitivity = 0.1
+var yaw_sensitivity = 0.1
+var pitch_sensitivity = 0.05
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -10,8 +11,8 @@ func _ready():
 
 func _input(event):
 	if event is InputEventMouseMotion:
-		yaw = fmod(yaw - event.relative.x  * sensitivity, 360) 
-		pitch = max(min(pitch - event.relative.y * sensitivity, 90),-90)
+		yaw = fmod(yaw - event.relative.x  * yaw_sensitivity, 360) 
+		pitch = max(min(pitch - event.relative.y * pitch_sensitivity, -10),-60)
 		
 		rotation = Vector3(deg2rad(pitch), deg2rad(yaw), 0)
 		

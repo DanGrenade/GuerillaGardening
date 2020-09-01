@@ -3,9 +3,9 @@ extends Node
 export var ground_raycast_path = NodePath()
 var ground_raycast_node
 
-export var gravity = 9.8
-export var jump_speed = 5
-export var max_fall_speed = -5
+export var gravity = 34
+export var jump_speed = 13
+export var max_fall_speed = -6
 
 export var bounce_speed = 30
 
