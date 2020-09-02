@@ -1,7 +1,7 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://Scripts/Character_Movement.gd" type="Script" id=1]
-[ext_resource path="res://Scripts/Player/CameraCast.gd" type="Script" id=3]
+[ext_resource path="res://Scripts/Player/Interaction_Area.gd" type="Script" id=2]
 [ext_resource path="res://Scripts/Player/CamPivot.gd" type="Script" id=4]
 [ext_resource path="res://Scripts/Player/Interaction_Handler.gd" type="Script" id=5]
 [ext_resource path="res://Scripts/Player/PlayerAnimator.gd" type="Script" id=6]
@@ -11,12 +11,14 @@
 [ext_resource path="res://Scripts/x_movement.gd" type="Script" id=10]
 [ext_resource path="res://Scripts/Rotate_by_Velocity.gd" type="Script" id=11]
 
-[sub_resource type="CapsuleShape" id=10]
+[sub_resource type="CapsuleShape" id=1]
 radius = 0.507588
 height = 1.05261
 
-[sub_resource type="Animation" id=2]
-resource_name = "Idle"
+[sub_resource type="SphereShape" id=2]
+radius = 1.48606
+
+[sub_resource type="Animation" id=3]
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:width")
 tracks/0/interp = 1
@@ -54,8 +56,7 @@ tracks/2/keys = {
 "values": [ 0.979924 ]
 }
 
-[sub_resource type="Animation" id=3]
-resource_name = "Planting"
+[sub_resource type="Animation" id=4]
 length = 0.6
 loop = true
 tracks/0/type = "value"
@@ -95,25 +96,25 @@ tracks/2/keys = {
 "values": [ 0.979924, 0.9, 0.98 ]
 }
 
-[sub_resource type="AnimationNodeAnimation" id=4]
+[sub_resource type="AnimationNodeAnimation" id=5]
 animation = "Idle"
 
-[sub_resource type="AnimationNodeAnimation" id=5]
+[sub_resource type="AnimationNodeAnimation" id=6]
 animation = "Planting"
-
-[sub_resource type="AnimationNodeStateMachineTransition" id=6]
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=7]
 
-[sub_resource type="AnimationNodeStateMachine" id=8]
-states/Idle/node = SubResource( 4 )
+[sub_resource type="AnimationNodeStateMachineTransition" id=8]
+
+[sub_resource type="AnimationNodeStateMachine" id=9]
+states/Idle/node = SubResource( 5 )
 states/Idle/position = Vector2( -89.6408, 99 )
-states/Planting/node = SubResource( 5 )
+states/Planting/node = SubResource( 6 )
 states/Planting/position = Vector2( 127.359, 89 )
-transitions = [ "Idle", "Planting", SubResource( 6 ), "Planting", "Idle", SubResource( 7 ) ]
+transitions = [ "Idle", "Planting", SubResource( 7 ), "Planting", "Idle", SubResource( 8 ) ]
 graph_offset = Vector2( -348.641, 0 )
 
-[sub_resource type="AnimationNodeStateMachinePlayback" id=9]
+[sub_resource type="AnimationNodeStateMachinePlayback" id=10]
 
 [node name="KinematicBody" type="KinematicBody"]
 collision_layer = 2
@@ -127,44 +128,48 @@ cast_to = Vector3( 0, -0.2, 0 )
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0 )
-shape = SubResource( 10 )
+shape = SubResource( 1 )
 
-[node name="Camera_Pivot" type="Spatial" parent="."]
+[node name="Camera_Pivot_Yaw" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.42027, -0.188859 )
 script = ExtResource( 4 )
 
-[node name="Camera" type="Camera" parent="Camera_Pivot"]
+[node name="Interaction_Area" type="Area" parent="Camera_Pivot_Yaw"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.42, -1.475 )
+collision_layer = 0
+collision_mask = 8
+script = ExtResource( 2 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Camera_Pivot_Yaw/Interaction_Area"]
+shape = SubResource( 2 )
+
+[node name="Camera_Pivot_Pitch" type="Spatial" parent="Camera_Pivot_Yaw"]
+
+[node name="Camera" type="Camera" parent="Camera_Pivot_Yaw/Camera_Pivot_Pitch"]
 transform = Transform( 1, 0, 0, 0, 0.972337, 0.233581, 0, -0.233581, 0.972337, -0.190146, 0.541935, 8.97502 )
 fov = 59.0625
-
-[node name="CameraCast" type="RayCast" parent="Camera_Pivot/Camera"]
-enabled = true
-cast_to = Vector3( 0, 0, -30 )
-collide_with_areas = true
-script = ExtResource( 3 )
-interaction_handler_path = NodePath("../../../Player_Overlord/Interaction_Handler")
 
 [node name="CSGBox" type="CSGBox" parent="."]
 width = 1.0256
 depth = 0.979924
 
 [node name="PlayerAnimator" type="AnimationPlayer" parent="CSGBox"]
-anims/Idle = SubResource( 2 )
-anims/Planting = SubResource( 3 )
+anims/Idle = SubResource( 3 )
+anims/Planting = SubResource( 4 )
 script = ExtResource( 6 )
 
 [node name="AnimationTree" type="AnimationTree" parent="CSGBox/PlayerAnimator"]
-tree_root = SubResource( 8 )
+tree_root = SubResource( 9 )
 anim_player = NodePath("..")
-parameters/playback = SubResource( 9 )
+parameters/playback = SubResource( 10 )
 
 [node name="Player_Overlord" type="Node" parent="."]
 script = ExtResource( 7 )
-pivot_path = NodePath("../Camera_Pivot")
+pivot_path = NodePath("../Camera_Pivot_Yaw")
 
 [node name="Interaction_Handler" type="Node" parent="Player_Overlord"]
 script = ExtResource( 5 )
-camera_cast_path = NodePath("../../Camera_Pivot/Camera/CameraCast")
+interact_area_path = NodePath("../../Camera_Pivot_Yaw/Interaction_Area")
 
 [node name="PlantingTime" type="Timer" parent="Player_Overlord/Interaction_Handler"]
 wait_time = 2.0

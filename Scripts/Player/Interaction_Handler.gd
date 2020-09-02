@@ -1,7 +1,7 @@
 extends Node
 
-export var camera_cast_path = NodePath()
-var camera_cast_node
+export var interact_area_path = NodePath()
+var interact_area_node
 
 enum {playerstate_normal, playerstate_interacting}
 var current_state = playerstate_normal
@@ -9,15 +9,11 @@ var current_state = playerstate_normal
 signal change_anim_state
 
 func _ready():
-	camera_cast_node = get_node(camera_cast_path)
+	interact_area_node = get_node(interact_area_path)
 	pass
 
 func check_interact():
-	var collider = camera_cast_node.get_collider()
-	if collider != null && collider.has_method("selected"):
-		var return_val = collider.selected()
-		interact(return_val)
-		pass
+	interact(interact_area_node.Interact())
 	pass
 
 func interact(interaction_type):

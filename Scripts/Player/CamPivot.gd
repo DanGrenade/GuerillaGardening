@@ -14,7 +14,8 @@ func _input(event):
 		yaw = fmod(yaw - event.relative.x  * yaw_sensitivity, 360) 
 		pitch = max(min(pitch - event.relative.y * pitch_sensitivity, -10),-60)
 		
-		rotation = Vector3(deg2rad(pitch), deg2rad(yaw), 0)
+		rotation.y = deg2rad(yaw)
+		$Camera_Pivot_Pitch.rotation.x = deg2rad(pitch)
 		
 		pass
 	pass
