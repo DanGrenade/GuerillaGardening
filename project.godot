@@ -211,7 +211,9 @@ config/icon="res://icon.png"
 
 [autoload]
 
-PlayerGlobals="*res://Scripts/PlayerGlobals.gd"
+GameState="*res://Scripts/Singletons/Game_State.gd"
+PlantGlobals="*res://Scripts/Singletons/Plant_Globals.gd"
+PlayerGlobals="*res://Scripts/Singletons/PlayerGlobals.gd"
 
 [editor_plugins]
 
