@@ -5,8 +5,6 @@ var pivot_node
 
 func _ready():
 	PlayerGlobals.player_node = get_parent()
-	
-	pivot_node = get_node(pivot_path)
 	pass
 
 func add_to_inventory(item, count):
@@ -25,16 +23,13 @@ func _process(delta):
 	if Input.is_action_pressed("move_left"): movement_input.x -= 1
 	if Input.is_action_pressed("move_right"): movement_input.x += 1
 	
-	#Rotate based on the camera rotation
-	movement_input = movement_input.rotated(-pivot_node.rotation.y)
-	
 	get_parent().give_horiz_movement($x_movement.give_input(movement_input, delta))
 	
 	get_parent().give_vert_movement($y_movement.run_gravity(delta))
 	if Input.is_action_pressed("jump"):
 		get_parent().give_vert_movement($y_movement.do_jump())
 	
-	$Rotate_By_Velocity.Give_Velocity(get_parent().velocity)
+	$Rotate.Give_Velocity(get_parent().velocity)
 	
 	pass
 
