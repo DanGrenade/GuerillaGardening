@@ -23,13 +23,19 @@ func _process(delta):
 	if Input.is_action_pressed("move_left"): movement_input.x -= 1
 	if Input.is_action_pressed("move_right"): movement_input.x += 1
 	
-	get_parent().give_horiz_movement($x_movement.give_input(movement_input, delta))
+	$KinematicBody.give_horiz_movement($x_movement.give_input(movement_input, delta))
 	
-	get_parent().give_vert_movement($y_movement.run_gravity(delta))
+	$KinematicBody.give_vert_movement($y_movement.run_gravity(delta))
 	if Input.is_action_pressed("jump"):
-		get_parent().give_vert_movement($y_movement.do_jump())
+		$KinematicBody.give_vert_movement($y_movement.do_jump())
 	
-	$Rotate.Give_Velocity(get_parent().velocity)
+	$Rotate.Give_Velocity($KinematicBody.velocity)
+	
+	var pushpullstate = 1
+	if Input.is_action_pressed("pull"): pushpullstate -= 1
+	if Input.is_action_pressed("push"): pushpullstate += 1
+	$KinematicBody/InteractionRotator/Vacuum_Area.Switch_State(pushpullstate)
+	
 	
 	pass
 
@@ -43,5 +49,5 @@ func change_pause_state(new_state):
 	pass
 
 func bounce():
-	get_parent().give_vert_movement($y_movement.bounce())
+	$KinematicBody.give_vert_movement($y_movement.bounce())
 	pass

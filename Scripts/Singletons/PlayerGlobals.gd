@@ -6,6 +6,8 @@ var player_node
 
 enum {item_empty, item_plant_seed}
 
+enum {vacuum_pull, vacuum_neutral, vacuum_push}
+
 func get_player_position():
 	if player_node == null:
 		return Vector3.ZERO
